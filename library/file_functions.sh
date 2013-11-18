@@ -52,6 +52,19 @@ function findFilesAboveThresholdSize() {
 	done < "${INPUT_FILE}.tmp"
 }
 
+function getLineNoOfMatchingRegex() {
+	PATTERN="$1"
+	FILE_NAME="$2"
+
+	echo `grep -i -n -w "$PATTERN" "$FILE_NAME" | awk '{print $1}' | cut -d':' -f1`
+}
+
+function deleteLineFromFile() {
+	LINE_NO="$1"
+	FILE_NAME="$2"
+
+	sed -i ''$LINE_NO'd' "$FILE_NAME"
+}
 
 
 	
