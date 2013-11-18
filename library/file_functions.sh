@@ -104,6 +104,80 @@ function appendLine() {
 	echo $LINE >> $FILE_NAME
 }
 
-
-
+function syncFolders() {
+	SOURCE=$1
+	TARGET=$2
 	
+        cp -r ${SOURCE}/*  ${TARGET}/
+}
+
+function copyFile() {
+	from="$1"
+	to="$2"
+	cp -v "$from" "$to"
+}
+
+function moveFile() {
+	from="$1"
+	to="$2"
+	mv -v "$from" "$to"
+}
+
+function createDirectory() {
+	directoryName="$1"
+	mkdir -p "$directoryName"
+}
+
+function removeFile() {
+	filePath="$1"
+	rm -vf "$filePath"
+}
+
+function removeDirectory() {
+	directoryPath="$1"
+	rm -rf "$directoryPath"
+}	
+
+function fileExists() {
+	local FOLDER_PATH="$1"
+	local FILE_NAME="$2"
+	if [ -f ${FOLDER_PATH}/${FILE_NAME} ]; then
+		echo "1"
+	else
+		echo "0"
+	fi
+}
+
+function exitWhenDirectoryExists() {
+	DIRECTORY=$1
+	if [ -d $DIRECTORY ]; then
+        	echo "${DIRECTORY} doesn't exists..! Please check"
+	        exit 1;
+	fi
+}
+
+# I'll process a OUT_TEMPLATE_FILE and replace all the SEARCH values with REPLACE values 
+function processTemplateFile() {
+	OUT_TEMPLATE_FILE=$1
+	SEARCH=$2
+	REPLACE=$3
+	echo "Performing replace operation using s/${SEARCH}/${REPLACE}/g"
+	sed -i  s/${SEARCH}/${REPLACE}/g $OUT_TEMPLATE_FILE
+}
+
+# I'll find files older then n number of days
+function findOlderFiles() {
+	FILESEARCH_REGEX=$1
+	OLD_FILE_DAYS=$2
+	echo "Deleting files older then ${OLD_FILE_DAYS}"
+	find  ${FILESEARCH_REGEX} -type f -mtime +${OLD_FILE_DAYS}
+}
+
+function exitIfFileContainsData() {
+	FILE=$1
+	MSG=$2
+	if [ -s $FILE ]; then
+		echo "$MSG"
+		exit 1
+	fi
+}
