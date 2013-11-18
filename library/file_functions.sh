@@ -53,18 +53,57 @@ function findFilesAboveThresholdSize() {
 }
 
 function getLineNoOfMatchingRegex() {
-	PATTERN="$1"
-	FILE_NAME="$2"
+	local PATTERN="$1"
+	local FILE_NAME="$2"
 
 	echo `grep -i -n -w "$PATTERN" "$FILE_NAME" | awk '{print $1}' | cut -d':' -f1`
 }
 
 function deleteLineFromFile() {
-	LINE_NO="$1"
-	FILE_NAME="$2"
+	local LINE_NO="$1"
+	local FILE_NAME="$2"
 
 	sed -i ''$LINE_NO'd' "$FILE_NAME"
 }
+
+function numberOfLinesInFile() {
+	local FILE_NAME="$1"
+	echo `wc -l "$FILE_NAME" | awk '{print $1}'`
+}
+
+function addLineIfNotPresent() {
+	local FILE_NAME="$1"
+	local LINE="$2"
+	local lineCount=`getLineNoOfMatchingRegex $LINE $FILE_NAME`
+	if [ "" = "$lineCount" ]; then
+		echo "Adding $LINE at the end of $FILE_NAME"
+		echo $LINE >> $FILE_NAME
+	fi
+}
+
+function addLineBelow() {
+	local LINE_NO="$1"
+	local LINE="$2"
+	local FILE_NAME="$3"
+
+	sed -i ''$LINE_NO' a\'"$LINE"'' "$FILE_NAME"
+}
+
+function addLineAbove() {
+	local LINE_NO="$1"
+	local LINE="$2"
+	local FILE_NAME="$3"
+
+	sed -i ''$LINE_NO' i\'"$LINE"'' "$FILE_NAME"
+}
+
+function appendLine() {
+	local FILE_NAME="$1"
+	local LINE="$2"
+	
+	echo $LINE >> $FILE_NAME
+}
+
 
 
 	
