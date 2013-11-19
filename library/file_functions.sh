@@ -52,9 +52,9 @@ function findFilesAboveThresholdSize() {
 	done < "${INPUT_FILE}.tmp"
 }
 
-function getLineNoOfMatchingRegex() {
-	local PATTERN="$1"
-	local FILE_NAME="$2"
+function getLineNoMatchingRegex() {
+	local FILE_NAME="$1"
+	local PATTERN="$2"
 
 	echo `grep -i -n -w "$PATTERN" "$FILE_NAME" | awk '{print $1}' | cut -d':' -f1`
 }
@@ -102,6 +102,13 @@ function appendLine() {
 	local LINE="$2"
 	
 	echo $LINE >> $FILE_NAME
+}
+
+function getStringAtLineNo(){
+    START_LINE_NO=$1
+    LOG_FILE=$2
+    LINE_STRING=$( ( sed -n "$START_LINE_NO"p "$LOG_FILE" ) )
+    echo "$LINE_STRING"
 }
 
 function syncFolders() {
@@ -180,4 +187,9 @@ function exitIfFileContainsData() {
 		echo "$MSG"
 		exit 1
 	fi
+}
+
+function initializFile(){
+    FILE_NAME=$1
+    :>$FILE_NAME
 }
