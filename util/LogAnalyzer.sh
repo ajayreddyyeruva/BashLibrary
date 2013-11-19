@@ -6,8 +6,9 @@ source /home/sandy/personal/BashLibrary/library/log_analyze_functions.sh
 source /home/sandy/personal/BashLibrary/library/file_functions.sh
 ##########################################################################################################
 FILE_TO_ANALYSE=$1
-LINE_NUMBER_FILE="/data/log_analyzer/exception_line_number.txt"
-EXCEPTION_FILE="/data/log_analyzer/exception_list.txt"
+FILE_IDENTIFIER=$2
+LINE_NUMBER_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_line_number.txt"
+EXCEPTION_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
 
 exitIfFileNotExists ${FILE_TO_ANALYSE}
 exitIfFileNotExists ${LINE_NUMBER_FILE}
