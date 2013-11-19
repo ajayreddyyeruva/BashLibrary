@@ -1,5 +1,5 @@
-. file_functions.sh
-. string_functions.sh
+source /home/sandy/personal/BashLibrary/library/file_functions.sh
+source /home/sandy/personal/BashLibrary/library/string_functions.sh
 
 EFFECTIVE_FILE="effectiveLogFile.txt"
 REG_EXPRESSION="[0-2][0-9][:][0-6][0-9][:][0-6][0-9][,]"
@@ -20,7 +20,6 @@ function getExceptionStack() {
 	EXCEPTION_LINE=$( getStringAtLineNo "${EXCEPTION_LINE_NO}" "${EFFECTIVE_FILE}" )
 	echo "Now processing line ${EXCEPTION_LINE}" 
 
-#	while ! ( echo "${EXCEPTION_LINE}" | grep -e "${REG_EXPRESSION}" >>${WASTE_OUTPUT_REDIRECT_FILE})  ; do
 	while ( ! matchRegex "${EXCEPTION_LINE}" "${REG_EXPRESSION}" )  ; do
 		echo "${EXCEPTION_LINE}" >> ${EXCEPTION_TO_CHECK}.txt
 		EXCEPTION_LINE_NO=$((EXCEPTION_LINE_NO+1))
@@ -53,7 +52,7 @@ function funcLogAnalyzer() {
         tail -n "$DIFF" "$LOG_FILE" >> $EFFECTIVE_FILE
 
         END_LINE_IN_TEMP_FILE=$( ( numberOfLinesInFile ${EFFECTIVE_FILE} ) )
-        echo "File is being processed for exception ${EXCEPTION_TO_CHECK} please wait ..."
+        echo "File is being processed for exception ${EXCEPTION_TO_CHECK} from line no ${START_LINE_NO} to ${END_LINE_NO} please wait ..."
 	EXCEPTION_LINE_NOS=$( getLineNoMatchingRegex "$EFFECTIVE_FILE"  $EXCEPTION_TO_CHECK )
 	for LINE_NO in ${EXCEPTION_LINE_NOS}
 	do

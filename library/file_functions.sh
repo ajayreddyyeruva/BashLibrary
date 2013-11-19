@@ -155,6 +155,14 @@ function fileExists() {
 	fi
 }
 
+function exitIfFileNotExists () {
+	FILE=$1
+	if [ ! -f ${FILE} ]; then
+        	echo "${FILE} doesn't exists..! Please check"
+	        exit 1;
+	fi
+}
+
 function exitWhenDirectoryExists() {
 	DIRECTORY=$1
 	if [ -d $DIRECTORY ]; then
