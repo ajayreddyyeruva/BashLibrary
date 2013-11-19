@@ -21,5 +21,30 @@ function getLineNosForString() {
         local STARTING_LINE_NO=$3
         local END_LINE_NO=$4
 	grep -n -i "$STRING_TO_CHECK" $FILE | cut -f1 -d: 
-	#>> $LINE_NOS_OF_EXCEPTION_FILE
+}
+
+function containsString() {
+	local STRING=$1
+	local CHAR_SEQUENCE=$2
+
+	if [[ ${STRING} =~ .*${CHAR_SEQUENCE}.* ]]
+	then
+		return 1
+	else
+		return 0
+	fi
+}
+
+function matchRegex() {
+	local STRING=$1
+	local REGEX=$2
+
+	if [[ ${STRING} =~ ${REGEX} ]]
+	then
+#		echo "Matched for ${STRING}"
+		return 0
+	else
+#		echo "Didn't matched ${REGEX} for ${STRING}"
+		return 1
+	fi
 }

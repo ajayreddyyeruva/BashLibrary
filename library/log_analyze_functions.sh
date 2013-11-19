@@ -1,6 +1,6 @@
 . file_functions.sh
+. string_functions.sh
 
-WASTE_OUTPUT_REDIRECT_FILE="redirect.txt"
 EFFECTIVE_FILE="effectiveLogFile.txt"
 REG_EXPRESSION="[0-2][0-9][:][0-6][0-9][:][0-6][0-9][,]"
 
@@ -12,22 +12,25 @@ REG_EXPRESSION="[0-2][0-9][:][0-6][0-9][:][0-6][0-9][,]"
 ###########################################################################################################
 
 function getExceptionStack() {
-	EXCEPTION_TO_CHECK=$1
-	LINE_NO=$2
+	local EXCEPTION_TO_CHECK=$1
+	local EXCEPTION_LINE_NO=$2
 
-	echo "Getting stacktrace of exception ${EXCEPTION_TO_CHECK} at line no ${LINE_NO}"
+	echo "Getting stacktrace of exception ${EXCEPTION_TO_CHECK} at line no ${EXCEPTION_LINE_NO}"
 	END_LINE_IN_TEMP_FILE=$( numberOfLinesInFile $EFFECTIVE_FILE )
-	READ_LINE_STRING=$( getStringAtLineNo "$LINE_NO" "$EFFECTIVE_FILE" )
+	EXCEPTION_LINE=$( getStringAtLineNo "${EXCEPTION_LINE_NO}" "${EFFECTIVE_FILE}" )
+	echo "Now processing line ${EXCEPTION_LINE}" 
 
-	 while ! ( echo "${READ_LINE_STRING}" | grep -e "${REG_EXPRESSION}" >>${WASTE_OUTPUT_REDIRECT_FILE})  ; do
-   	      echo "${READ_LINE_STRING}" >> ${EXCEPTION_TO_CHECK}.txt
-              LINE_NO=$((LINE_NO+1))
-              READ_LINE_STRING=$( (getStringAtLineNo "$LINE_NO" "$EFFECTIVE_FILE" ) )
-  	            if [ $LINE_NO -ge $END_LINE_IN_TEMP_FILE ] ; then
-         	           break
-                    fi
-        done
-	return $LINE_NO
+#	while ! ( echo "${EXCEPTION_LINE}" | grep -e "${REG_EXPRESSION}" >>${WASTE_OUTPUT_REDIRECT_FILE})  ; do
+	while ( ! matchRegex "${EXCEPTION_LINE}" "${REG_EXPRESSION}" )  ; do
+		echo "${EXCEPTION_LINE}" >> ${EXCEPTION_TO_CHECK}.txt
+		EXCEPTION_LINE_NO=$((EXCEPTION_LINE_NO+1))
+		EXCEPTION_LINE=$( (getStringAtLineNo "${EXCEPTION_LINE_NO}" "$EFFECTIVE_FILE" ) )
+		if [ ${EXCEPTION_LINE_NO} -ge ${END_LINE_IN_TEMP_FILE} ] ; then
+			break
+		fi
+#		echo "Now processing line ${EXCEPTION_LINE}" 
+	done
+	return ${EXCEPTION_LINE_NO}
 }
 
 ###################################################################################################################
@@ -44,7 +47,6 @@ function funcLogAnalyzer() {
 	local END_LINE_NO=$( ( numberOfLinesInFile ${LOG_FILE} ) )
 
   	initializFile "${EXCEPTION_TO_CHECK}.txt"
-        initializFile "${WASTE_OUTPUT_REDIRECT_FILE}"
         initializFile "${EFFECTIVE_FILE}"
     
         DIFF=$((END_LINE_NO - START_LINE_NO))
@@ -57,7 +59,7 @@ function funcLogAnalyzer() {
 	do
 		READ_LINE_STRING=$( (getStringAtLineNo "$LINE_NO" "$EFFECTIVE_FILE" ) )
 		echo "$READ_LINE_STRING"  >> $EXCEPTION_TO_CHECK.txt
-		LINE_NO= getExceptionStack $EXCEPTION_TO_CHECK $LINE_NO
+		LINE_NO= getExceptionStack "$EXCEPTION_TO_CHECK" $LINE_NO
 		LINE_NO=$((LINE_NO+1))
                	    if [ $LINE_NO -ge $END_LINE_IN_TEMP_FILE ] ;then
                             break
