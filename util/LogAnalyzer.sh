@@ -30,8 +30,13 @@ fi
 while read EXCEPTION_LINE ; do
 	EXCEPTION=$( getWordAtPosition "${EXCEPTION_LINE}" 1 '=' )
 	EXCEPTION_RECIPIENT=$( getWordAtPosition "${EXCEPTION_LINE}" 2 '=' )
-	funcLogAnalyzer $FILE_TO_ANALYSE ${EXCEPTION} ${START_LINE_NO}
-	sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
+	funcLogAnalyzer ${FILE_TO_ANALYSE} ${EXCEPTION} ${START_LINE_NO}
+	EXCEPTION_FILE_SIZE=$( numberOfLinesInFile  ${EXCEPTION}.txt)
+	if [ ${EXCEPTION_FILE_SIZE} -gt 20 ]; then
+		sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
+	else
+		echo "No need to send mail for exception ${EXCEPTION}" 
+	fi
 done < ${EXCEPTION_FILE}
 initializFile "$LINE_NUMBER_FILE"
 
