@@ -9,19 +9,18 @@ FILE_TO_ANALYSE=$1
 FILE_IDENTIFIER=$2
 LINE_NUMBER_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_line_number.txt"
 EXCEPTION_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
-EMAIL_ADDRESS="sandeep.rawat@mettl.com"
 
 function sendMail() {
 	local EXCEPTION=$1
-
-        echo "Checking if mail needs to be sent for exception ${EXCEPTION}"
+	local EXCEPTION_RECIPIENT=$2
+#        echo "Checking if mail needs to be sent for exception ${EXCEPTION}"
 	local TOTAL_LINE=$( numberOfLinesInFile ${EXCEPTION}.txt )
         if [ -f ${EXCEPTION}.txt ] && [ ${TOTAL_LINE} -gt 0 ]; then
 
-	        echo "Sending Stacktrace for exception ${EXCEPTION}.txt"
-	        cat ${EXCEPTION}.txt
-                echo "Sending mail to ${EMAIL_ADDRESS}"
-                cat ${EXCEPTION}.txt | sendmail $EMAIL_ADDRESS 
+#	        echo "Sending Stacktrace for exception ${EXCEPTION}.txt"
+#	        cat ${EXCEPTION}.txt
+                echo "Sending mail for exception ${EXCEPTION} to ${EXCEPTION_RECIPIENT}"
+                cat ${EXCEPTION}.txt | sendmail ${EXCEPTION_RECIPIENT}
         fi
 }
 
@@ -40,9 +39,11 @@ if [ $START_LINE_NO -gt ${LOG_FILE_END_LINE_NO}  ] || [ ! ${START_LINE_NO} ] ;th
 	START_LINE_NO=1
 fi
 
-while read EXCEPTION ; do
+while read EXCEPTION_LINE ; do
+	EXCEPTION=$( getWordAtPosition "${EXCEPTION_LINE}" 1 '=' )
+	EXCEPTION_RECIPIENT=$( getWordAtPosition "${EXCEPTION_LINE}" 2 '=' )
 	funcLogAnalyzer $FILE_TO_ANALYSE ${EXCEPTION} ${START_LINE_NO}
-	sendMail ${EXCEPTION}
+	sendMail ${EXCEPTION} ${EXCEPTION_RECIPIENT}
 done < ${EXCEPTION_FILE}
 initializFile "$LINE_NUMBER_FILE"
 
