@@ -12,20 +12,6 @@ LINE_NUMBER_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_line_number.tx
 EXCEPTION_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
 ADMIN_MAIL_ID=sandeep.rawat@mettl.com
 
-#function sendMail() {
-#	local EXCEPTION=$1
-#	local EXCEPTION_RECIPIENT=$2
-#        echo "Checking if mail needs to be sent for exception ${EXCEPTION}"
-#	local TOTAL_LINE=$( numberOfLinesInFile ${EXCEPTION}.txt )
-#        if [ -f ${EXCEPTION}.txt ] && [ ${TOTAL_LINE} -gt 0 ]; then
-
-#	        echo "Sending Stacktrace for exception ${EXCEPTION}.txt"
-#	        cat ${EXCEPTION}.txt
-#                echo "Sending mail for exception ${EXCEPTION} to ${EXCEPTION_RECIPIENT}"
-#                cat ${EXCEPTION}.txt | sendmail ${EXCEPTION_RECIPIENT}
-#        fi
-#}
-
 exitIfFileNotExists ${FILE_TO_ANALYSE}
 exitIfFileNotExists ${LINE_NUMBER_FILE}
 exitIfFileNotExists ${EXCEPTION_FILE}
@@ -50,5 +36,4 @@ done < ${EXCEPTION_FILE}
 initializFile "$LINE_NUMBER_FILE"
 
 echo "${LOG_FILE_END_LINE_NO}">"${LINE_NUMBER_FILE}"
-#./email.sh ./email_list.db  EXCEPTIONS#
 

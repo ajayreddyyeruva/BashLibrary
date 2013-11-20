@@ -1,3 +1,5 @@
+## These functions depend on ssmtp for sending mail, please refer below link for setup
+## http://www.havetheknowhow.com/Configure-the-server/Install-ssmtp.html
 
 source /home/sandy/personal/BashLibrary/library/file_functions.sh
 
