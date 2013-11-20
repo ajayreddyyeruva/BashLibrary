@@ -4,25 +4,27 @@
 
 source /home/sandy/personal/BashLibrary/library/log_analyze_functions.sh
 source /home/sandy/personal/BashLibrary/library/file_functions.sh
+source /home/sandy/personal/BashLibrary/library/mail_functions.sh
 ##########################################################################################################
 FILE_TO_ANALYSE=$1
 FILE_IDENTIFIER=$2
 LINE_NUMBER_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_line_number.txt"
 EXCEPTION_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
+ADMIN_MAIL_ID=sandeep.rawat@mettl.com
 
-function sendMail() {
-	local EXCEPTION=$1
-	local EXCEPTION_RECIPIENT=$2
+#function sendMail() {
+#	local EXCEPTION=$1
+#	local EXCEPTION_RECIPIENT=$2
 #        echo "Checking if mail needs to be sent for exception ${EXCEPTION}"
-	local TOTAL_LINE=$( numberOfLinesInFile ${EXCEPTION}.txt )
-        if [ -f ${EXCEPTION}.txt ] && [ ${TOTAL_LINE} -gt 0 ]; then
+#	local TOTAL_LINE=$( numberOfLinesInFile ${EXCEPTION}.txt )
+#        if [ -f ${EXCEPTION}.txt ] && [ ${TOTAL_LINE} -gt 0 ]; then
 
 #	        echo "Sending Stacktrace for exception ${EXCEPTION}.txt"
 #	        cat ${EXCEPTION}.txt
-                echo "Sending mail for exception ${EXCEPTION} to ${EXCEPTION_RECIPIENT}"
-                cat ${EXCEPTION}.txt | sendmail ${EXCEPTION_RECIPIENT}
-        fi
-}
+#                echo "Sending mail for exception ${EXCEPTION} to ${EXCEPTION_RECIPIENT}"
+#                cat ${EXCEPTION}.txt | sendmail ${EXCEPTION_RECIPIENT}
+#        fi
+#}
 
 exitIfFileNotExists ${FILE_TO_ANALYSE}
 exitIfFileNotExists ${LINE_NUMBER_FILE}
@@ -43,7 +45,7 @@ while read EXCEPTION_LINE ; do
 	EXCEPTION=$( getWordAtPosition "${EXCEPTION_LINE}" 1 '=' )
 	EXCEPTION_RECIPIENT=$( getWordAtPosition "${EXCEPTION_LINE}" 2 '=' )
 	funcLogAnalyzer $FILE_TO_ANALYSE ${EXCEPTION} ${START_LINE_NO}
-	sendMail ${EXCEPTION} ${EXCEPTION_RECIPIENT}
+	sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
 done < ${EXCEPTION_FILE}
 initializFile "$LINE_NUMBER_FILE"
 
