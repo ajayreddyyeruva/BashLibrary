@@ -111,6 +111,14 @@ function getStringAtLineNo(){
     echo "$LINE_STRING"
 }
 
+function getWordAtPosition() {
+	local LINE="$1"
+	local POSITION="$2"
+	local SEPARATOR=$3
+	WORD=$( echo "${LINE}" | cut -f${POSITION} -d${SEPARATOR} )
+	echo "${WORD}"
+}
+
 function syncFolders() {
 	SOURCE=$1
 	TARGET=$2
