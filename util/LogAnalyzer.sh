@@ -1,10 +1,11 @@
 #!/bin/bash
 ############################################################################################################
-#you need to update below 2 lines according to the directories
+#you need to update below lines according to the directories, but the preferred installation location would
+#always be /opt/scripts/BashLibrary
 
-source /home/sandy/personal/BashLibrary/library/log_analyze_functions.sh
-source /home/sandy/personal/BashLibrary/library/file_functions.sh
-source /home/sandy/personal/BashLibrary/library/mail_functions.sh
+source /opt/scripts/BashLibrary/library/log_analyze_functions.sh
+source /opt/scripts/BashLibrary/library/file_functions.sh
+source /opt/scripts/BashLibrary/library/mail_functions.sh
 ##########################################################################################################
 FILE_TO_ANALYSE=$1
 FILE_IDENTIFIER=$2
