@@ -1,7 +1,7 @@
 ## These functions depend on ssmtp for sending mail, please refer below link for setup
 ## http://www.havetheknowhow.com/Configure-the-server/Install-ssmtp.html
 
-source /home/sandy/personal/BashLibrary/library/file_functions.sh
+source /opt/scripts/BashLibrary/library/file_functions.sh
 
 function sendMail() {
 	local RECIPIENT=$1
