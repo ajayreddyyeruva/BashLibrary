@@ -4,6 +4,7 @@ source /opt/scripts/BashLibrary/library/mail_functions.sh
 
 EFFECTIVE_FILE="effectiveLogFile.txt"
 REG_EXPRESSION="[0-2][0-9][:][0-6][0-9][:][0-6][0-9][,]"
+ADMIN_MAIL_ID=sandeep.rawat@mettl.com
 
 
 ###########################################################################################################
