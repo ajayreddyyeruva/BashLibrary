@@ -1,5 +1,6 @@
 source /opt/scripts/BashLibrary/library/file_functions.sh
 source /opt/scripts/BashLibrary/library/string_functions.sh
+source /opt/scripts/BashLibrary/library/mail_functions.sh
 
 EFFECTIVE_FILE="effectiveLogFile.txt"
 REG_EXPRESSION="[0-2][0-9][:][0-6][0-9][:][0-6][0-9][,]"
@@ -65,3 +66,32 @@ function funcLogAnalyzer() {
               	     fi
 	done
 }
+
+
+############################################################################################################################################
+# I'll parse the log file for exceptions mentioned in exception file having format(exception=recipient mail id)
+#
+#
+#
+#
+############################################################################################################################################
+function parseLogFileForExceptions() {
+	local FILE_TO_ANALYSE=$1
+	local START_LINE_NO=$2
+	local EXCEPTIONS_FILE=$3
+
+	while read EXCEPTION_LINE ; do
+		EXCEPTION=$( getWordAtPosition "${EXCEPTION_LINE}" 1 '=' )
+		EXCEPTION_RECIPIENT=$( getWordAtPosition "${EXCEPTION_LINE}" 2 '=' )
+
+		funcLogAnalyzer ${FILE_TO_ANALYSE} ${EXCEPTION} ${START_LINE_NO}
+
+		EXCEPTION_FILE_SIZE=$( numberOfLinesInFile  ${EXCEPTION}.txt)
+		if [ ${EXCEPTION_FILE_SIZE} -gt 20 ]; then
+			sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
+		else
+			echo "No need to send mail for exception ${EXCEPTION}" 
+		fi
+	done < ${EXCEPTIONS_FILE}
+}
+
