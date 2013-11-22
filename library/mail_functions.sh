@@ -17,7 +17,7 @@ function sendMail() {
 	appendLine tmp.mail ""
 	appendLine tmp.mail "${BODY}"
 
-	ssmtp ${RECIPIENT} < tmp.mail
+	/usr/sbin/ssmtp ${RECIPIENT} < tmp.mail
 }
 
 
@@ -35,7 +35,7 @@ function sendMailForFile() {
 
 	cat ${BODY_FILE} >> tmp.mail
 
-	ssmtp ${RECIPIENT} < tmp.mail
+	/usr/sbin/ssmtp ${RECIPIENT} < tmp.mail
 
 }
 
