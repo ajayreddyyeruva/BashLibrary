@@ -80,6 +80,7 @@ function parseLogFileForExceptions() {
 	local FILE_TO_ANALYSE=$1
 	local START_LINE_NO=$2
 	local EXCEPTIONS_FILE=$3
+	local ENVIRONMENT=$4
 
 	while read EXCEPTION_LINE ; do
 		EXCEPTION=$( getWordAtPosition "${EXCEPTION_LINE}" 1 '=' )
@@ -89,7 +90,7 @@ function parseLogFileForExceptions() {
 
 		EXCEPTION_FILE_SIZE=$( numberOfLinesInFile  ${EXCEPTION}.txt)
 		if [ ${EXCEPTION_FILE_SIZE} -gt 20 ]; then
-			sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
+			sendMailForFile ${EXCEPTION_RECIPIENT} "Exception stack trace for ${EXCEPTION} in file ${FILE_TO_ANALYSE} on environment ${ENVIRONMENT}" ${ADMIN_MAIL_ID} ${EXCEPTION}.txt
 		else
 			echo "No need to send mail for exception ${EXCEPTION}" 
 		fi

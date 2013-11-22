@@ -25,7 +25,7 @@ exitIfFileNotExists ${EXCEPTIONS_FILE}
 
 for EXCEPTION_FILE in $( findRecentlyModifiedFiles "${FILE_TO_ANALYSE}*" 60 ); do
 	echo "Processing log file ${EXCEPTION_FILE}"
-	parseLogFileForExceptions ${EXCEPTION_FILE} 1 ${EXCEPTIONS_FILE}
+	parseLogFileForExceptions ${EXCEPTION_FILE} 1 ${EXCEPTIONS_FILE} Production
 done
 
 
