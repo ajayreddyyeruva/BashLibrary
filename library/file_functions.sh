@@ -192,7 +192,7 @@ function processTemplateFile() {
 function findOlderFiles() {
 	FILESEARCH_REGEX=$1
 	OLD_FILE_DAYS=$2
-	echo "Deleting files older then ${OLD_FILE_DAYS}"
+	echo "Finding files older then ${OLD_FILE_DAYS}"
 	find  ${FILESEARCH_REGEX} -type f -mtime +${OLD_FILE_DAYS}
 }
 
