@@ -17,7 +17,7 @@ source /opt/scripts/BashLibrary/library/mail_functions.sh
 ##########################################################################################################
 FILE_TO_ANALYSE=$1
 FILE_IDENTIFIER=$2
-LAST_MODIFIED_TIME=120
+LAST_MODIFIED_TIME=30
 FILE_MATCHING_PATTERN=${FILE_TO_ANALYSE}.[1-9]$
 EXCEPTIONS_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
 ADMIN_MAIL_ID=sandeep.rawat@mettl.com
@@ -32,8 +32,6 @@ for EXCEPTION_FILE in $( findRecentlyModifiedFiles "${FILE_TO_ANALYSE}*" ${LAST_
 		echo "Processing log file ${EXCEPTION_FILE}"
 		parseLogFileForExceptions ${EXCEPTION_FILE} 1 ${EXCEPTIONS_FILE} Production
 	else
-		echo "matchRegex ${EXCEPTION_FILE} ${FILE_MATCHING_PATTERN}"
-		echo "Value : ${PROCESS_LOG_FILE}"
 		echo "The log file ${EXCEPTION_FILE} is modfied within ${LAST_MODIFIED_TIME} but it doesn't comes in our range(last 10 log files)"
 	fi
 done
