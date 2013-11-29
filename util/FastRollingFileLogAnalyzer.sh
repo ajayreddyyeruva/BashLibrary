@@ -17,13 +17,15 @@ source /opt/scripts/BashLibrary/library/mail_functions.sh
 ##########################################################################################################
 FILE_TO_ANALYSE=$1
 FILE_IDENTIFIER=$2
+LAST_MODIFIED_TIME=30
+
 EXCEPTIONS_FILE="/data/log_analyzer/${FILE_IDENTIFIER}/exception_list.txt"
 ADMIN_MAIL_ID=sandeep.rawat@mettl.com
 
 exitIfFileNotExists ${FILE_TO_ANALYSE}
 exitIfFileNotExists ${EXCEPTIONS_FILE}
 
-for EXCEPTION_FILE in $( findRecentlyModifiedFiles "${FILE_TO_ANALYSE}*" 60 ); do
+for EXCEPTION_FILE in $( findRecentlyModifiedFiles "${FILE_TO_ANALYSE}*" ${LAST_MODIFIED_TIME} ); do
 	echo "Processing log file ${EXCEPTION_FILE}"
 	parseLogFileForExceptions ${EXCEPTION_FILE} 1 ${EXCEPTIONS_FILE} Production
 done
