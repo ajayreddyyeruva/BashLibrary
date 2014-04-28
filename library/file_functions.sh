@@ -216,3 +216,13 @@ function initializFile(){
     FILE_NAME=$1
     :>$FILE_NAME
 }
+
+function deleteOlderDirectories() {
+	PARENT_DIR=$1
+	DIRS_COUNT_TO_BE_SKIPPED=$2
+
+	cd ${PARENT_DIR}
+	DIR_COUNT=`ls -lrtd */ | wc -l`
+	ls -lrtd */ | head -$((${DIR_COUNT}-${DIRS_COUNT_TO_BE_SKIPPED})) | awk '{print $9}'
+	rm -rvf `ls -lrtd */ | head -$((${DIR_COUNT}-${DIRS_COUNT_TO_BE_SKIPPED})) | awk '{print $9}'`	
+}
